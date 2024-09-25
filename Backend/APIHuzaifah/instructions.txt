@@ -1,0 +1,3 @@
+Huzaifah work on backend here.
+do not and NEVER push useless things like virtual environments and model specifications on github.
+make sure to add them to .gitignore
