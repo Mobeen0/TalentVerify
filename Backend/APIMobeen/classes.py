@@ -4,4 +4,4 @@ class User(BaseModel):
     FullName:str
     UserName:str
     UserPass:str
-    schedule:str="None"
+    Schedule:str="None"
