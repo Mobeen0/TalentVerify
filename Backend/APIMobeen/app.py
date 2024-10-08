@@ -1,7 +1,8 @@
 import os
 import Database.utility as DB
 import DataModels.classes as DBClasses
-import jsonify
+import AudioModel.inference as Audio
+
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Form, Body
@@ -30,7 +31,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get('/')
 def home():
-    return "Hello World"
+    JSONResponse(content={"Message": "Hello World"}, status_code = 200)
 
 
 
@@ -87,4 +88,11 @@ def login(UserName:str, Password:str):
             return JSONResponse(content={"UserInfo": IntervieweeData,"Type":"Interviewee"}, status_code = 200)
     return JSONResponse(content={"Message": "User Not Found"}, status_code = 404)
         
+
+@app.get('/audio')
+def get_emotion():
+    response = Audio.get_emotion()
+    print(response)
+    print(type(response))
+    return JSONResponse(content={"Message": f"Emotion = {response[0]}"}, status_code = 200)
 
