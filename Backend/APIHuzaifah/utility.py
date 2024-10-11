@@ -31,3 +31,32 @@ def getFaceEmotion(frame_video):
         return emo_names[np.argmax(emotions[0][0])]
     except:
         return "None"
+    
+identity_vectors=None
+    
+def validateIdentity_Store(frame1,frame2):
+    try:
+        faces1 = detector.detect_faces(frame1)
+        faces2 = detector.detect_faces(frame2)
+        
+        if len(faces1[0])==0 or len(faces2[0])==0:
+            return "Error: No face detected"
+        
+        if len(faces1[0])>1 or len(faces2[0])>1:
+            return "Error: Multiple faces in image"
+        
+        iden1=detector.detect_identity(frame1,faces1)[0][0]
+        iden2=detector.detect_identity(frame2,faces2)[0][0]
+        
+        similarity=np.dot(iden1,iden2)/(np.linalg.norm(iden1)*np.linalg.norm(iden2))
+        
+        if(similarity>0.5):
+            identity_vectors=[iden1,iden2]
+            return "Success"
+        else:
+            return "Error: Faces provided dont match"
+        
+    except:
+        return "None"
+    
+    
