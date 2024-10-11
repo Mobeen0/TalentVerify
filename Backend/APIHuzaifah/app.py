@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from utility import getFaceEmotion, initIdentity
+from utility import getFaceEmotion, initIdentity, checkIdentity
 
 import os
 import numpy as np
@@ -78,3 +78,20 @@ async def init_identity(image_list_request:ImageListRequest):
         return JSONResponse(content = {success_status}, status_code = 200)
     else:
         return JSONResponse(content={'No imgs'}, status_code = 400)
+    
+@app.post('/checkIdentity')
+async def check_identity(image_request:ImageRequest):
+    img_src = image_request.img
+
+    if img_src is not None:
+        base64_encoded_data = img_src.split(',')[1]
+        decoded_data = base64.b64decode(base64_encoded_data)
+        np_data = np.frombuffer(decoded_data, np.uint8)
+
+        cv_image = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
+        
+        success_status = checkIdentity(cv_image,)
+        return JSONResponse(content = {success_status}, status_code = 200)
+    else:
+        return JSONResponse(content={'No imgs'}, status_code = 400)
+    

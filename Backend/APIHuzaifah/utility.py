@@ -42,8 +42,13 @@ def initIdentity(frame1,frame2):
         if len(faces1[0])==0 or len(faces2[0])==0:
             return "Error: No face detected"
         
-        if len(faces1[0])>1 or len(faces2[0])>1:
-            return "Error: Multiple faces in image"
+        if len(faces1[0])>1:
+            msg=len(faces1[0])+" faces found in frame 1"
+            return msg
+        
+        if len(faces2[0])>1:
+            msg=len(faces2[0])+" faces found in frame 2"
+            return msg
         
         iden1=detector.detect_identity(frame1,faces1)[0][0]
         iden2=detector.detect_identity(frame2,faces2)[0][0]
@@ -59,4 +64,29 @@ def initIdentity(frame1,frame2):
     except:
         return "None"
     
+    
+def checkIdentity(frame):
+    try:
+        faces = detector.detect_faces(frame)
+        
+        if len(faces[0])==0:
+            return "Error: No face detected"
+        
+        if len(faces[0])>1:
+            msg=len(faces[0])+" faces found in frame"
+            return msg
+        
+        
+        iden=detector.detect_identity(frame,faces)[0][0]
+        
+        similarity1=np.dot(identity_vectors[0],iden)/(np.linalg.norm(identity_vectors[0])*np.linalg.norm(iden)) #cosine similarity formula
+        similarity2=np.dot(identity_vectors[1],iden)/(np.linalg.norm(identity_vectors[1])*np.linalg.norm(iden))
+        
+        if(similarity1>0.5) and similarity2>0.5: #Threshold is subject to change
+            return "Success"
+        else:
+            return "Error: Faces provided dont match"
+        
+    except:
+        return "None"
     
