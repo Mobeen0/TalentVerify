@@ -2,10 +2,13 @@ import os
 import Database.utility as DB
 import DataModels.classes as DBClasses
 import AudioModel.inference as Audio
-
+import tempfile
+import shutil
+import wave
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Form, Body
+from fastapi import FastAPI,Request, File, UploadFile,HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
@@ -13,8 +16,12 @@ from requests import Request
 from datetime import date
 from typing import List, Optional
 
+
+
 load_dotenv()
 CONNECTION_URI = os.getenv('CONNECTION_URI')
+
+
 
 
 @asynccontextmanager
@@ -28,6 +35,15 @@ async def lifespan(app: FastAPI):
     DB.disconnect_server()
     
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware( # allow requests from the frontend
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 @app.get('/')
 def home():
@@ -56,7 +72,7 @@ def signup_employer(FirstName:str,LastName:str,DateOfBirth:str,UserName:str,
 
 @app.post('/SignUpInterviewee')
 def signup_interviewee(FirstName:str,LastName:str,DateOfBirth:str,UserName:str, 
-                    Password:str, Email:str, PicFlag:int,Domains: List[str]):
+                    Password:str, Email:str, PicFlag:int,Domains: List[str] = []):
     
     IntervieweeData = DBClasses.Interviewee(FirstName = FirstName,LastName = LastName,DateOfBirth = DateOfBirth,
                                        UserName = UserName, Password = Password, Email = Email,
@@ -66,7 +82,7 @@ def signup_interviewee(FirstName:str,LastName:str,DateOfBirth:str,UserName:str,
         print("Attempting Signing Up Interviewee")
         RetVal = DB.add_interviewee(IntervieweeData)
         if(type(RetVal) == str):
-            return JSONResponse(content={"message": "Sign Up unsuccessful"}, status_code = 400)
+            return JSONResponse(content={"message": "RetVal"}, status_code = 400)
         else:
             return JSONResponse(content={"message": "Successfully added to Database"}, status_code = 200)
     except:
@@ -96,3 +112,36 @@ def get_emotion():
     print(type(response))
     return JSONResponse(content={"Message": f"Emotion = {response[0]}"}, status_code = 200)
 
+
+def create_wav_file(raw_data, output_path, channels=1, sample_width=2, frame_rate=44100):
+    with wave.open(output_path, 'wb') as wav_file:
+        wav_file.setnchannels(channels)
+        wav_file.setsampwidth(sample_width)
+        wav_file.setframerate(frame_rate)
+        wav_file.writeframes(raw_data)
+
+@app.post("/AudioEmotion")
+async def upload_audio(file: UploadFile = File(...)):
+    try:
+        # Read the raw audio data
+        raw_audio_data = await file.read()
+
+        # Create a temporary WAV file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+            temp_file_path = temp_file.name
+
+        # Convert the raw audio data to a WAV file
+        create_wav_file(raw_audio_data, temp_file_path)
+
+        # Process the audio file
+        result = Audio.get_emotion_from_path(temp_file_path)
+
+        # Delete the temporary file
+        os.unlink(temp_file_path)
+
+        return JSONResponse(content={"message": "File uploaded and processed successfully", "result": result})
+    except Exception as e:
+        # If a temporary file was created, ensure it's deleted
+        if 'temp_file_path' in locals():
+            os.unlink(temp_file_path)
+        return JSONResponse(content={"message": f"An error occurred: {str(e)}"}, status_code=500)

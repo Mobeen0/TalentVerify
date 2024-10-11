@@ -11,7 +11,8 @@ def get_emotion():
 def get_emotion_from_path(FilePath):
     out_prob, score, index, text_lab = classifier.classify_file(FilePath)
     #print(text_lab)
-    return text_lab
+    print(out_prob)
+    return text_lab[0]
 
 def iterate_emotion_file():
     ParentDir = os.path.join("AudioModel","SampleRecordings")
