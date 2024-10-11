@@ -69,6 +69,9 @@ def checkIdentity(frame):
     try:
         faces = detector.detect_faces(frame)
         
+        if identity_vectors==None:
+            return "Identity has not yet been established"
+        
         if len(faces[0])==0:
             return "Error: No face detected"
         
