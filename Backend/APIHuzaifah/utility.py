@@ -34,7 +34,7 @@ def getFaceEmotion(frame_video):
     
 identity_vectors=None
     
-def validateIdentity_Store(frame1,frame2):
+def initIdentity(frame1,frame2):
     try:
         faces1 = detector.detect_faces(frame1)
         faces2 = detector.detect_faces(frame2)
@@ -48,9 +48,9 @@ def validateIdentity_Store(frame1,frame2):
         iden1=detector.detect_identity(frame1,faces1)[0][0]
         iden2=detector.detect_identity(frame2,faces2)[0][0]
         
-        similarity=np.dot(iden1,iden2)/(np.linalg.norm(iden1)*np.linalg.norm(iden2))
+        similarity=np.dot(iden1,iden2)/(np.linalg.norm(iden1)*np.linalg.norm(iden2)) #cosine similarity formula
         
-        if(similarity>0.5):
+        if(similarity>0.5): #Threshold is subject to change
             identity_vectors=[iden1,iden2]
             return "Success"
         else:
