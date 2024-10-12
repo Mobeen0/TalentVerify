@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="50" viewBox="0 0 250 80">
+  <defs>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E90FF" />
+      <stop offset="50%" stop-color="#00CED1" />
+      <stop offset="100%" stop-color="#2E8B57" />
+    </linearGradient>
+    <style>
+      .text { font: bold 40px 'Arial', sans-serif; }
+      .underline { fill: none; stroke: #1E90FF; stroke-width: 3; }
+    </style>
+  </defs>
+  
+  <!-- Clipping Path for Text -->
+  <clipPath id="textClip">
+    <text x="10" y="50" class="text">TalentVerify</text>
+  </clipPath>
+  
+  <!-- Gradient-filled Rectangle clipped to Text Shape -->
+  <rect x="0" y="0" width="250" height="80" fill="url(#textGradient)" clip-path="url(#textClip)" />
+  
+  <!-- Wavy Underline -->
+  <path class="underline" d="M10,60 Q40,70 70,60 T130,60 T190,60 T250,60" />
+</svg>
