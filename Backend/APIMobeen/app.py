@@ -2,6 +2,7 @@ import os
 import Database.utility as DB
 import DataModels.classes as DBClasses
 import AudioModel.inference as Audio
+import Parsing
 import tempfile
 import shutil
 import wave
@@ -16,11 +17,15 @@ from requests import Request
 from datetime import date
 from typing import List, Optional
 
+import Parsing.ResumeParsing
+import Parsing.AnswerEvaluation
+
+
 
 
 load_dotenv()
 CONNECTION_URI = os.getenv('CONNECTION_URI')
-
+GROQ_API = os.getenv("GROQ_API_KEY")
 
 
 
@@ -145,3 +150,20 @@ async def upload_audio(file: UploadFile = File(...)):
         if 'temp_file_path' in locals():
             os.unlink(temp_file_path)
         return JSONResponse(content={"message": f"An error occurred: {str(e)}"}, status_code=500)
+
+@app.post('/ResumeQuestionGen')
+async def GetQuestions(file:UploadFile):
+    OCRText = await Parsing.ResumeParsing.extract_text_from_pdf(file)
+    
+    HardQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Hard")
+    SoftQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Soft")
+    
+    return JSONResponse(content={"Hard":HardQuestions,"Soft":SoftQuestions}, status_code=200)
+    
+
+@app.post('/EvaluateAnswer')
+async def GetAnswer(Question:str,Answer:str):
+    
+    EvaluationResults = Parsing.AnswerEvaluation.get_evaluation(GROQ_API,Question,Answer)
+    
+    return JSONResponse(content = EvaluationResults, status_code=200)
