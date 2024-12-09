@@ -1,0 +1,6 @@
+venv
+__pycache__
+**/__pycache__/
+.env
+wav2vec2_checkpoints
+**/SampleRecordings/
