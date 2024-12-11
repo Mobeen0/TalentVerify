@@ -1,5 +1,6 @@
 import feat as ft
 import numpy as np
+#from deepface import DeepFace
 
 video_model="resmasknet"
 
@@ -87,6 +88,12 @@ def checkIdentity(frame):
         
         similarity1=np.dot(identity_vectors[0],iden)/(np.linalg.norm(identity_vectors[0])*np.linalg.norm(iden)) #cosine similarity formula
         similarity2=np.dot(identity_vectors[1],iden)/(np.linalg.norm(identity_vectors[1])*np.linalg.norm(iden))
+        
+        
+        # deepfake_check = DeepFace.extract_faces(img_path=frame, anti_spoofing = True)[0]['is_real']
+        # if(deepfake_check=='False'):
+        #     return 'Deepfake detected'
+        
         
         if(similarity1>0.5) and similarity2>0.5: #Threshold is subject to change
             return "Success"

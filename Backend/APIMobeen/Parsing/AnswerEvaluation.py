@@ -38,7 +38,8 @@ def get_evaluation(API_KEY,Question,Answer):
                 "content":prompt.format(Question,Answer)
             }
         ],
-        response_model = EvaluationScore
+        response_model = EvaluationScore,
+        temperature = 0
     )
     
     print(resp.model_dump_json(indent=2))

@@ -26,13 +26,16 @@ const ExSwitch = lazy(() => import("../views/FormElements/ExSwitch.js"));
 const FormLayouts = lazy(() => import("../views/FormLayouts/FormLayouts.js"));
 
 const DemoContainer = lazy(() => import("../components/DemoContainer.js"));
-
+const AddJobPosting = lazy(()=>import("../components/AddJobPosting.js"))
+const EmployerPostings = lazy(()=>import("../components/EmployerPostings.js"))
+const ViewAllPostings = lazy(()=>import("../components/ViewAllPostings.js"))
+const InterviewComponent = lazy(()=>import("../components/InterviewComponent.js"))
 /*****Routes******/
 
-const ThemeRoutes = [
+const ThemeRoutes = (props) => [
   {
     path: "/",
-    element: <FullLayout />,
+    element: <FullLayout setUserName = {props.setUserName}/>,
     children: [
       { path: "/", element: <></>},
       { path: "dashboards/dashboard1", exact: true, element: <Dashboard1 /> },
@@ -46,10 +49,11 @@ const ThemeRoutes = [
       { path: "/form-elements/switch", element: <ExSwitch /> },
       { path: '/loggedInEmployer', element: <DashboardEmployer />},
       { path: "/loggedInInterviewee", element:<></>},
-      { path: "/dashboards/jobPosting", element:<></>},
-      { path: "/dashboards/addJobPosting", element:<></>},
-      { path: "/dashboards/intervieweeSearch", element:<></>},
+      { path: "/dashboards/jobPosting", element:<EmployerPostings userName = {props.userName}/>},
+      { path: "/dashboards/addJobPosting", element:<AddJobPosting userName = {props.userName}/>},
+      { path: "/dashboards/intervieweeSearch", element:< ViewAllPostings/>},
       { path: "/dashboards/intervieweependingResult", element:<></>},
+      { path: "dashboards/applyInterview", element:<InterviewComponent />},
       { path: "/dashboards/intervieweedemo", element:< DemoContainer/>},
     ],
   },
