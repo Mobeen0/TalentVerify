@@ -50,7 +50,7 @@ const domainList = [
   'IoT',
 ];
 
-const SignUp = ({setuserFunc}) => {
+const SignUp = ({setuserFunc, setUserName}) => {
   const [isLogin, setIsLogin] = useState(true);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
@@ -109,13 +109,15 @@ const SignUp = ({setuserFunc}) => {
       setSuccess(`Login successful. Welcome, ${response.data.UserInfo.FirstName} ${response.data.UserInfo.LastName}!`);
       console.log('Login response:', response.data);
       
+      setUserName(loginForm.username)
+      
       if(response.data.Type === "Employer"){
         setuserFunc("Employer")
         navigate('/loggedInEmployer')
       }
       if(response.data.Type === "Interviewee"){
         setuserFunc("Interviewee")
-        navigate('/loggedInInterviewee')
+        navigate('/dashboards/intervieweeSearch')
       }
     } catch (error) {
       setError(error.response?.data?.Message || 'Login failed. Please try again.');

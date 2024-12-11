@@ -1,5 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from datetime import datetime
 
 
     
@@ -149,3 +150,94 @@ def interviewee_login(username, password):
     except Exception as e:
         print("Error during interviewee login:", e)
         return None
+    
+def add_job_posting(username, job_title, job_description, job_skills):
+    """Adds a new job posting by an employer.
+
+    Args:
+        username (str): The employer's username.
+        job_title (str): The title of the job.
+        job_description (str): The description of the job.
+        job_skills (str): Required skills for the job (stored as a single string).
+
+    Returns:
+        bool: True if the job was added successfully, False otherwise.
+    """
+
+    try:
+        Db = Client["TalentVerify"]
+        Collection = Db["Interview"]
+        job_posting = {
+            "Username": username,
+            "JobTitle": job_title,
+            "JobDescription": job_description,
+            "JobSkills": job_skills,
+            "JobDate": datetime.now()
+        }
+        Collection.insert_one(job_posting)
+        print("Job posting added successfully.")
+        return True
+
+    except Exception as e:
+        print("Error adding job posting:", e)
+        return False
+    
+def return_all_postings(username):
+    """Returns all job postings for a specific employer.
+
+    Args:
+        username (str): The employer's username.
+
+    Returns:
+        list: A list of job postings.
+    """
+
+    try:
+        Db = Client["TalentVerify"]
+        Collection = Db["Interview"]
+        postings = list(Collection.find({"Username": username}))
+        postings = [dict(posting) for posting in postings]
+        count = 0
+        ReturnDict = {}
+        for post in postings:
+            post.pop('_id')
+            post['JobDate'] = post['JobDate'].strftime("%m/%d/%Y")
+            ReturnDict.update({str(count):post})
+            count+=1
+            
+        print(ReturnDict)
+        return ReturnDict
+
+    except Exception as e:
+        print("Error retrieving job postings:", e)
+        return []
+    
+def view_all_postings():
+    """Returns all job postings for a specific employer.
+
+    Args:
+        username (str): The employer's username.
+
+    Returns:
+        list: A list of job postings.
+    """
+
+    try:
+        Db = Client["TalentVerify"]
+        Collection = Db["Interview"]
+        postings = list(Collection.find())
+        postings = [dict(posting) for posting in postings]
+        count = 0
+        ReturnDict = {}
+        for post in postings:
+            post.pop('_id')
+            post['JobDate'] = post['JobDate'].strftime("%m/%d/%Y")
+            ReturnDict.update({str(count):post})
+            count+=1
+            
+        print(ReturnDict)
+        return ReturnDict
+
+    except Exception as e:
+        print("Error retrieving job postings:", e)
+        return []

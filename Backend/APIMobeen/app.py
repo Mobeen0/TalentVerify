@@ -7,8 +7,10 @@ import tempfile
 import shutil
 import wave
 
+
 from dotenv import load_dotenv
 from fastapi import FastAPI,Request, File, UploadFile,HTTPException
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -167,3 +169,23 @@ async def GetAnswer(Question:str,Answer:str):
     EvaluationResults = Parsing.AnswerEvaluation.get_evaluation(GROQ_API,Question,Answer)
     
     return JSONResponse(content = EvaluationResults, status_code=200)
+
+@app.post('/AddJobPosting')
+async def AddJobPosting(Username:str,JobTitle:str, JobDescription:str,JobSkills:str):
+    Flag = DB.add_job_posting(Username,JobTitle,JobDescription,JobSkills)
+    if Flag:
+        return JSONResponse(content = {"message":"Successfully Added"},status_code=200)
+    else:
+        return JSONResponse(content = {"message":"Error Occured"}, status_code=400)
+
+@app.get('/ShowAllPostings')
+async def ShowAllPostings(Username:str):
+    listings = DB.return_all_postings(Username)
+
+    return JSONResponse(content = listings,status_code =200)
+
+@app.get('/ViewAllPostings')
+async def ViewAllPostings():
+    listings = DB.view_all_postings()
+    
+    return JSONResponse(content = listings,status_code =200)

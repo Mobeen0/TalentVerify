@@ -37,7 +37,7 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
   },
 }));
 
-const FullLayout = () => {
+const FullLayout = (props) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -53,7 +53,7 @@ const FullLayout = () => {
       {isHomePage ? (
         <>
           <LandingHeader />    
-            <SignUp setuserFunc = {setUserType}/>
+            <SignUp setuserFunc = {setUserType} setUserName = {props.setUserName}/>
           <Footer isSidebarOpen = {false} />
         </>
       ) : (
