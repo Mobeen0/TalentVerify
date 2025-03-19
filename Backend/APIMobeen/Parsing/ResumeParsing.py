@@ -46,7 +46,7 @@ def GenQuestions(API_KEY, OCRText, QuestionType):
             "content": prompt.format(QuestionType,OCRText),
         }
     ],
-    response_model=QuestionsClass)
+    response_model=QuestionsClass,temperature=0)
     
     print(resp.model_dump_json(indent=2))
     
