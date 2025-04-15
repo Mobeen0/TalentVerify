@@ -62,6 +62,7 @@ const FullLayout = (props) => {
             sx={{
               paddingLeft: isSidebarOpen && lgUp ? "265px" : "",
               backgroundColor: "#ffffff",
+              transition: "padding-left 0.3s ease",
             }}
             toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
             toggleMobileSidebar={() => setMobileSidebarOpen(true)}
@@ -85,7 +86,9 @@ const FullLayout = (props) => {
               maxWidth={false}
               sx={{
                 paddingTop: "20px",
-                paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "",
+                paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "24px!important",
+                width: "100%",
+                transition: "padding-left 0.3s ease",
               }}
             >
               <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
@@ -93,7 +96,7 @@ const FullLayout = (props) => {
               </Box>
             </Container>
           </PageWrapper>
-          <Footer isSidebarOpen = {true} />
+          <Footer isSidebarOpen={isSidebarOpen} />
         </>
       )}
     </MainWrapper>

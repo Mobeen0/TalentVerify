@@ -1,5 +1,5 @@
 import React from "react";
-//import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -24,6 +24,7 @@ import {
 import userimg from "../../../assets/images/users/3.jpg";
 
 const Header = (props) => {
+  let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -34,7 +35,7 @@ const Header = (props) => {
     setAnchorEl(null);
   };
 
-  // 4
+  // Profile menu
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
   const handleClick4 = (event) => {
@@ -43,6 +44,7 @@ const Header = (props) => {
 
   const handleClose4 = () => {
     setAnchorEl4(null);
+    navigate("/")
   };
 
   // 5
@@ -57,8 +59,17 @@ const Header = (props) => {
   };
 
   return (
-    <AppBar sx={props.sx} elevation={0} className={props.customClass}>
-      <Toolbar>
+    <AppBar
+      sx={{
+        backgroundColor: "#2c3e50", // A rich dark blue/slate color
+        boxShadow: "0 4px 12px 0 rgba(0,0,0,0.1)",
+        ...props.sx
+      }}
+      elevation={0}
+      className={props.customClass}
+    >
+      <Toolbar sx={{ justifyContent: "space-between", minHeight: "64px" }}>
+        {/* Left side - Menu icon */}
         <IconButton
           color="inherit"
           aria-label="menu"
@@ -68,204 +79,108 @@ const Header = (props) => {
               lg: "none",
               xs: "inline",
             },
+            color: "#ecf0f1", // Light color for better contrast
           }}
         >
           <MenuOutlinedIcon width="20" height="20" />
         </IconButton>
-        <IconButton
-          aria-label="menu"
-          color="inherit"
-          aria-controls="dd-menu"
-          aria-haspopup="true"
-          onClick={handleClick5}
-        >
-          <AddToPhotosOutlinedIcon />
-        </IconButton>
-        <Menu
-          id="dd-menu"
-          anchorEl={anchorEl5}
-          keepMounted
-          open={Boolean(anchorEl5)}
-          onClose={handleClose5}
-          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "left", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "250px",
-              right: 0,
-              top: "70px !important",
-            },
-          }}
-        >
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New account
-            </Box>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New Page
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New Component
-            </Box>
-          </MenuItem>
-        </Menu>
-        <Box flexGrow={1} />
 
-        {/* ------------------------------------------- */}
-        {/* Notifications Dropdown */}
-        {/* ------------------------------------------- */}
-        <IconButton
-          aria-label="menu"
-          color="inherit"
-          aria-controls="notification-menu"
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          <NotificationsNoneOutlinedIcon width="20" height="20" />
-        </IconButton>
-        <Menu
-          id="notification-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "200px",
-              right: 0,
-              top: "70px !important",
-            },
+        {/* Right side - User profile */}
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "12px",
+            marginLeft: "auto" 
           }}
         >
-          <MenuItem onClick={handleClose}>Action</MenuItem>
-          <MenuItem onClick={handleClose}>Action Else</MenuItem>
-          <MenuItem onClick={handleClose}>Another Action</MenuItem>
-        </Menu>
-        {/* ------------------------------------------- */}
-        {/* End Notifications Dropdown */}
-        {/* ------------------------------------------- */}
-        {/* ------------------------------------------- */}
-        {/* Profile Dropdown */}
-        {/* ------------------------------------------- */}
-        <Box
-          sx={{
-            width: "1px",
-            backgroundColor: "rgba(0,0,0,0.1)",
-            height: "25px",
-            ml: 1,
-          }}
-        ></Box>
-        <Button
-          aria-label="menu"
-          color="inherit"
-          aria-controls="profile-menu"
-          aria-haspopup="true"
-          onClick={handleClick4}
-        >
-          <Box
+          <Divider 
+            orientation="vertical" 
+            flexItem 
+            sx={{ 
+              height: 28, 
+              backgroundColor: "rgba(255,255,255,0.2)" 
+            }} 
+          />
+          
+          <Button
+            aria-label="menu"
+            color="inherit"
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            onClick={handleClick4}
             sx={{
-              display: "flex",
-              alignItems: "center",
+              borderRadius: "50px",
+              padding: "4px",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.1)"
+              }
             }}
           >
-            <Avatar
-              src={userimg}
-              alt={userimg}
-              sx={{
-                width: "30px",
-                height: "30px",
-              }}
-            />
-          </Box>
-        </Button>
-        <Menu
-          id="profile-menu"
-          anchorEl={anchorEl4}
-          keepMounted
-          open={Boolean(anchorEl4)}
-          onClose={handleClose4}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "250px",
-              right: 0,
-              top: "70px !important",
-            },
-          }}
-        >
-          <MenuItem onClick={handleClose4}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
             <Box
               sx={{
-                ml: 2,
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              My account
+              <Avatar
+                src={userimg}
+                alt={userimg}
+                sx={{
+                  width: "36px",
+                  height: "36px",
+                  border: "2px solid #3498db", // Accent color for border
+                }}
+              />
             </Box>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <PersonAddOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Add another account
-          </MenuItem>
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <SettingsOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <LogoutOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
+          </Button>
+          
+          <Menu
+            id="profile-menu"
+            anchorEl={anchorEl4}
+            keepMounted
+            open={Boolean(anchorEl4)}
+            onClose={handleClose4}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            sx={{
+              "& .MuiMenu-paper": {
+                width: "250px",
+                borderRadius: "8px",
+                boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+                right: 0,
+                top: "70px !important",
+              },
+            }}
+          >
+            <MenuItem onClick={handleClose4} sx={{ padding: "10px 16px" }}>
+              <Avatar
+                src={userimg}
+                sx={{
+                  width: "40px",
+                  height: "40px",
+                  border: "2px solid #3498db", // Match the accent color
+                }}
+              />
+              <Box
+                sx={{
+                  ml: 2,
+                  fontWeight: "500",
+                }}
+              >
+                My account
+              </Box>
+            </MenuItem>
+            <Divider sx={{ margin: "4px 0" }} />
+            <MenuItem onClick={handleClose4} sx={{ padding: "10px 16px" }}>
+              <ListItemIcon>
+                <LogoutOutlinedIcon fontSize="small" sx={{ color: "#e74c3c" }} />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );

@@ -30,6 +30,10 @@ const AddJobPosting = lazy(()=>import("../components/AddJobPosting.js"))
 const EmployerPostings = lazy(()=>import("../components/EmployerPostings.js"))
 const ViewAllPostings = lazy(()=>import("../components/ViewAllPostings.js"))
 const InterviewComponent = lazy(()=>import("../components/InterviewComponent.js"))
+const AutomatedEmoDetector = lazy(()=>import("../components/AutomatedEmoDetector.js"))
+//const IntegratedInterviewComponent= lazy(()=>import("../components/CompleteInterview.js"))
+const IntegratedInterviewComponent= lazy(()=>import("../components/IntegratedInterviewComponent.js"))
+
 /*****Routes******/
 
 const ThemeRoutes = (props) => [
@@ -53,10 +57,12 @@ const ThemeRoutes = (props) => [
       { path: "/dashboards/addJobPosting", element:<AddJobPosting userName = {props.userName}/>},
       { path: "/dashboards/intervieweeSearch", element:< ViewAllPostings/>},
       { path: "/dashboards/intervieweependingResult", element:<></>},
-      { path: "dashboards/applyInterview", element:<InterviewComponent />},
+      { path: "dashboards/applyInterview", element:<IntegratedInterviewComponent />},
       { path: "/dashboards/intervieweedemo", element:< DemoContainer/>},
+      { path: "/dashboards/AutomatedEmoDetector", element:< AutomatedEmoDetector/>},
     ],
   },
 ];
 
 export default ThemeRoutes;
+

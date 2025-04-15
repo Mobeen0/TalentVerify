@@ -16,15 +16,17 @@ const Menuitems = [
     href: "/dashboards/intervieweependingResult",
   },
   {
-    title: "SetupInterview",
+    title: "InterviewDemo",
     icon: EventNoteOutlinedIcon,
-    href: "/dashboards/intervieweedemo",
+    href: "/dashboards/AutomatedEmoDetector",
   },
   {
     title: "ApplyInterview",
     icon: TaskAltOutlinedIcon,
     href: "/dashboards/applyInterview",
-  },
+  }
 ];
+
+
 
 export default Menuitems;
