@@ -1,5 +1,7 @@
 import React from "react";
-//import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../../context/ThemeContext';
+import ThemeToggle from '../../../components/ThemeToggle';
 
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -24,6 +26,8 @@ import {
 import userimg from "../../../assets/images/users/3.jpg";
 
 const Header = (props) => {
+  let navigate = useNavigate();
+  const { isDarkMode } = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -34,7 +38,7 @@ const Header = (props) => {
     setAnchorEl(null);
   };
 
-  // 4
+  // Profile menu
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
   const handleClick4 = (event) => {
@@ -43,6 +47,7 @@ const Header = (props) => {
 
   const handleClose4 = () => {
     setAnchorEl4(null);
+    navigate("/")
   };
 
   // 5
@@ -57,215 +62,151 @@ const Header = (props) => {
   };
 
   return (
-    <AppBar sx={props.sx} elevation={0} className={props.customClass}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={props.toggleMobileSidebar}
-          sx={{
-            display: {
-              lg: "none",
-              xs: "inline",
-            },
-          }}
-        >
-          <MenuOutlinedIcon width="20" height="20" />
-        </IconButton>
-        <IconButton
-          aria-label="menu"
-          color="inherit"
-          aria-controls="dd-menu"
-          aria-haspopup="true"
-          onClick={handleClick5}
-        >
-          <AddToPhotosOutlinedIcon />
-        </IconButton>
-        <Menu
-          id="dd-menu"
-          anchorEl={anchorEl5}
-          keepMounted
-          open={Boolean(anchorEl5)}
-          onClose={handleClose5}
-          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "left", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "250px",
-              right: 0,
-              top: "70px !important",
-            },
-          }}
-        >
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New account
-            </Box>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New Page
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleClose5}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
-            <Box
-              sx={{
-                ml: 2,
-              }}
-            >
-              New Component
-            </Box>
-          </MenuItem>
-        </Menu>
-        <Box flexGrow={1} />
-
-        {/* ------------------------------------------- */}
-        {/* Notifications Dropdown */}
-        {/* ------------------------------------------- */}
-        <IconButton
-          aria-label="menu"
-          color="inherit"
-          aria-controls="notification-menu"
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          <NotificationsNoneOutlinedIcon width="20" height="20" />
-        </IconButton>
-        <Menu
-          id="notification-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "200px",
-              right: 0,
-              top: "70px !important",
-            },
-          }}
-        >
-          <MenuItem onClick={handleClose}>Action</MenuItem>
-          <MenuItem onClick={handleClose}>Action Else</MenuItem>
-          <MenuItem onClick={handleClose}>Another Action</MenuItem>
-        </Menu>
-        {/* ------------------------------------------- */}
-        {/* End Notifications Dropdown */}
-        {/* ------------------------------------------- */}
-        {/* ------------------------------------------- */}
-        {/* Profile Dropdown */}
-        {/* ------------------------------------------- */}
-        <Box
-          sx={{
-            width: "1px",
-            backgroundColor: "rgba(0,0,0,0.1)",
-            height: "25px",
-            ml: 1,
-          }}
-        ></Box>
-        <Button
-          aria-label="menu"
-          color="inherit"
-          aria-controls="profile-menu"
-          aria-haspopup="true"
-          onClick={handleClick4}
-        >
-          <Box
+    <AppBar
+      sx={{
+        backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        position: "fixed",
+        width: "100%",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        ...props.sx
+      }}
+      elevation={0}
+      className={props.customClass}
+    >
+      <Toolbar 
+        sx={{ 
+          justifyContent: "space-between", 
+          minHeight: "64px",
+          px: { xs: 2, sm: 3 },
+          maxWidth: "100%"
+        }}
+      >
+        {/* Left side - Menu icon */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <IconButton
+            color="inherit"
+            aria-label="menu"
+            onClick={props.toggleMobileSidebar}
             sx={{
-              display: "flex",
-              alignItems: "center",
+              display: {
+                lg: "none",
+                xs: "inline",
+              },
+              color: isDarkMode ? "#ffffff" : "#2c3e50",
+              mr: 1
             }}
           >
-            <Avatar
-              src={userimg}
-              alt={userimg}
-              sx={{
-                width: "30px",
-                height: "30px",
-              }}
-            />
-          </Box>
-        </Button>
-        <Menu
-          id="profile-menu"
-          anchorEl={anchorEl4}
-          keepMounted
-          open={Boolean(anchorEl4)}
-          onClose={handleClose4}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          sx={{
-            "& .MuiMenu-paper": {
-              width: "250px",
-              right: 0,
-              top: "70px !important",
-            },
+            <MenuOutlinedIcon width="20" height="20" />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="menu"
+            onClick={props.toggleSidebar}
+            sx={{
+              display: {
+                lg: "inline",
+                xs: "none",
+              },
+              color: isDarkMode ? "#ffffff" : "#2c3e50",
+            }}
+          >
+            <MenuOutlinedIcon width="20" height="20" />
+          </IconButton>
+        </Box>
+
+        {/* Right side - User profile */}
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "12px",
+            marginLeft: "auto" 
           }}
         >
-          <MenuItem onClick={handleClose4}>
-            <Avatar
-              sx={{
-                width: "35px",
-                height: "35px",
-              }}
-            />
+          <ThemeToggle />
+          
+          <Button
+            aria-label="menu"
+            color="inherit"
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            onClick={handleClick4}
+            sx={{
+              borderRadius: "50px",
+              padding: "4px",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.04)"
+              }
+            }}
+          >
             <Box
               sx={{
-                ml: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1
               }}
             >
-              My account
+              <Avatar
+                src={userimg}
+                alt={userimg}
+                sx={{
+                  width: "36px",
+                  height: "36px",
+                  border: "2px solid #1E90FF",
+                }}
+              />
             </Box>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <PersonAddOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Add another account
-          </MenuItem>
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <SettingsOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <LogoutOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
+          </Button>
+          
+          <Menu
+            id="profile-menu"
+            anchorEl={anchorEl4}
+            keepMounted
+            open={Boolean(anchorEl4)}
+            onClose={handleClose4}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            sx={{
+              "& .MuiMenu-paper": {
+                width: "250px",
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                right: 0,
+                top: "70px !important",
+                backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
+              },
+            }}
+          >
+            <MenuItem onClick={handleClose4} sx={{ padding: "12px 16px" }}>
+              <Avatar
+                src={userimg}
+                sx={{
+                  width: "40px",
+                  height: "40px",
+                  border: "2px solid #1E90FF",
+                }}
+              />
+              <Box
+                sx={{
+                  ml: 2,
+                  fontWeight: "500",
+                  color: isDarkMode ? "#ffffff" : "#2c3e50"
+                }}
+              >
+                My account
+              </Box>
+            </MenuItem>
+            <Divider sx={{ margin: "4px 0", backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)" }} />
+            <MenuItem onClick={handleClose4} sx={{ padding: "12px 16px" }}>
+              <ListItemIcon>
+                <LogoutOutlinedIcon fontSize="small" sx={{ color: "#e74c3c" }} />
+              </ListItemIcon>
+              <Box sx={{ color: isDarkMode ? "#ffffff" : "#2c3e50" }}>Logout</Box>
+            </MenuItem>
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );

@@ -25,7 +25,7 @@ import Parsing.AnswerEvaluation
 
 
 
-load_dotenv()
+load_dotenv(override=True)
 CONNECTION_URI = os.getenv('CONNECTION_URI')
 GROQ_API = os.getenv("GROQ_API_KEY")
 
@@ -157,10 +157,39 @@ async def upload_audio(file: UploadFile = File(...)):
 async def GetQuestions(file:UploadFile):
     OCRText = await Parsing.ResumeParsing.extract_text_from_pdf(file)
     
-    HardQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Hard")
-    SoftQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Soft")
+    try:
+        raise("skipping")
+        HardQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Hard")
+        SoftQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Soft")
+        return JSONResponse(content={"Hard":HardQuestions,"Soft":SoftQuestions}, status_code=200)
+    except Exception as e:
+        HardQuestions= [
+    "Can you describe your experience with emotion detection via video and speech analysis at AIM Lab?",
+    "How did you improve the emotion feedback system's response time at AIM Lab?",
+    "Can you explain the process of mapping detected emotions to personality traits at AIM Lab?",
+    "What were the responsibilities of your role as a Software Engineer Intern at KK Solutions?",
+    "How did you build responsive UI components with React.js and JavaScript at KK Solutions?",
+    "Can you describe the customer churn prediction model you developed at 10Pearls?",
+    "How did you achieve 90% accuracy in identifying at-risk customers with the churn prediction model at 10Pearls?",
+    "What is the RAG-based natural language interface you built at 10Pearls and how does it work?",
+    "Can you explain the Intelligent Search system you developed using Retrieval-Augmented Generation (RAG)?",
+    "How does the system retrieve sensitive user invoice data from natural language querying in the Intelligent Search system?"
+  ]
+        SoftQuestions= [
+    "Can you describe your experience with emotion detection via video and speech analysis at AIM Lab?",
+    "How did you improve the emotion feedback system's response time at AIM Lab?",
+    "Can you explain the process of mapping detected emotions to personality traits at AIM Lab?",
+    "What were the responsibilities of your role as a Software Engineer Intern at KK Solutions?",
+    "How did you build responsive UI components with React.js and JavaScript at KK Solutions?",
+    "Can you describe the customer churn prediction model you developed at 10Pearls?",
+    "How did you achieve 90% accuracy in identifying at-risk customers with the churn prediction model at 10Pearls?",
+    "What is the RAG-based natural language interface you built at 10Pearls and how does it work?",
+    "Can you explain the Intelligent Search system you developed using Retrieval-Augmented Generation (RAG)?",
+    "How does the system retrieve sensitive user invoice data from natural language querying in the Intelligent Search system?"
+  ]
+        return JSONResponse(content={"Hard":HardQuestions,"Soft":SoftQuestions}, status_code=200)
+
     
-    return JSONResponse(content={"Hard":HardQuestions,"Soft":SoftQuestions}, status_code=200)
     
 
 @app.post('/EvaluateAnswer')

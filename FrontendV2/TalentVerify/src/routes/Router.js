@@ -9,6 +9,11 @@ const FullLayout = lazy(() => import("../layouts/FullLayout/FullLayout.js"));
 /*****Pages******/
 const Dashboard1 = lazy(() => import("../views/dashboards/Dashboard1.js"));
 const DashboardEmployer = lazy(() => import("../views/dashboards/DashboardEmployer.js"));
+const DashboardInterviewee = lazy(() => import("../views/dashboards/DashboardInterviewee.js"));
+const PerformanceDashboard = lazy(() => import("../views/dashboards/PerformanceDashboard.js"));
+const ProfileDashboard = lazy(() => import("../views/dashboards/ProfileDashboard.js"));
+const SettingsDashboard = lazy(() => import("../views/dashboards/SettingsDashboard.js"));
+const PendingResultsDashboard = lazy(() => import("../views/dashboards/PendingResultsDashboard.js"));
 
 /*****Tables******/
 const BasicTable = lazy(() => import("../views/tables/BasicTable.js"));
@@ -25,11 +30,14 @@ const ExSwitch = lazy(() => import("../views/FormElements/ExSwitch.js"));
 // form layouts
 const FormLayouts = lazy(() => import("../views/FormLayouts/FormLayouts.js"));
 
-const DemoContainer = lazy(() => import("../components/DemoContainer.js"));
-const AddJobPosting = lazy(()=>import("../components/AddJobPosting.js"))
-const EmployerPostings = lazy(()=>import("../components/EmployerPostings.js"))
-const ViewAllPostings = lazy(()=>import("../components/ViewAllPostings.js"))
-const InterviewComponent = lazy(()=>import("../components/InterviewComponent.js"))
+const DemoContainer = lazy(() => import("../components/interview/DemoContainer.js"));
+const AddJobPosting = lazy(() => import("../components/jobs/components/AddJobPosting.js"));
+const EmployerPostings = lazy(() => import("../components/jobs/components/EmployerPostings.js"));
+const ViewAllPostings = lazy(() => import("../components/jobs/components/ViewAllPostings.js"));
+const InterviewComponent = lazy(() => import("../components/interview/InterviewComponent.js"));
+const AutomatedEmoDetector = lazy(() => import("../components/emotion/components/AutomatedEmoDetector.js"));
+const IntegratedInterviewComponent = lazy(() => import("../components/interview/IntegratedInterviewComponent.js"));
+
 /*****Routes******/
 
 const ThemeRoutes = (props) => [
@@ -48,15 +56,21 @@ const ThemeRoutes = (props) => [
       { path: "/form-elements/slider", element: <ExSlider /> },
       { path: "/form-elements/switch", element: <ExSwitch /> },
       { path: '/loggedInEmployer', element: <DashboardEmployer />},
-      { path: "/loggedInInterviewee", element:<></>},
+      { path: "/loggedInInterviewee", element: <DashboardInterviewee />},
+      { path: "/dashboards/intervieweeDashboard", element: <DashboardInterviewee />},
+      { path: "/dashboards/intervieweePerformance", element: <PerformanceDashboard />},
+      { path: "/dashboards/intervieweeProfile", element: <ProfileDashboard />},
+      { path: "/dashboards/intervieweeSettings", element: <SettingsDashboard />},
       { path: "/dashboards/jobPosting", element:<EmployerPostings userName = {props.userName}/>},
       { path: "/dashboards/addJobPosting", element:<AddJobPosting userName = {props.userName}/>},
       { path: "/dashboards/intervieweeSearch", element:< ViewAllPostings/>},
-      { path: "/dashboards/intervieweependingResult", element:<></>},
-      { path: "dashboards/applyInterview", element:<InterviewComponent />},
+      { path: "/dashboards/intervieweependingResult", element: <PendingResultsDashboard />},
+      { path: "dashboards/applyInterview", element:<IntegratedInterviewComponent />},
       { path: "/dashboards/intervieweedemo", element:< DemoContainer/>},
+      { path: "/dashboards/AutomatedEmoDetector", element:< AutomatedEmoDetector/>},
     ],
   },
 ];
 
 export default ThemeRoutes;
+

@@ -11,7 +11,7 @@ class EvaluationScore(BaseModel):
     
 def get_evaluation(API_KEY,Question,Answer):
     client = Groq(api_key = API_KEY)
-    client = instructor.from_groq(client,mode = instructor.Mode.TOOLS)
+    client = instructor.from_groq(client,mode=instructor.Mode.TOOLS)
     
     prompt = """
         Act as you are an hiring agent, you will evaluate a candidates response to the interview question.

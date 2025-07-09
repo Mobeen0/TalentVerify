@@ -8,17 +8,24 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-
+import { useTheme } from '../../../../src/context/ThemeContext';
 import ExTable from "./ExTable";
 
 const ProductPerformance = () => {
+  const { isDarkMode } = useTheme();
   const [age, setAge] = React.useState("10");
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   return (
-    <Card variant="outlined">
+    <Card 
+      variant="outlined"
+      sx={{
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
+      }}
+    >
       <CardContent>
         <Box
           sx={{
@@ -34,6 +41,7 @@ const ProductPerformance = () => {
               variant="h3"
               sx={{
                 marginBottom: "0",
+                color: isDarkMode ? '#ffffff' : '#2c3e50',
               }}
               gutterBottom
             >
@@ -57,6 +65,18 @@ const ProductPerformance = () => {
                 value={age}
                 onChange={handleChange}
                 label="Age"
+                sx={{
+                  color: isDarkMode ? '#ffffff' : 'inherit',
+                  '& .MuiSelect-icon': {
+                    color: isDarkMode ? '#ffffff' : 'inherit',
+                  },
+                  '&:before': {
+                    borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.23)' : 'rgba(0, 0, 0, 0.23)',
+                  },
+                  '&:hover:not(.Mui-disabled):before': {
+                    borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.23)' : 'rgba(0, 0, 0, 0.23)',
+                  },
+                }}
               >
                 <MenuItem value="">
                   <em>None</em>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Mic, MicOff, Send, FileUp, Clock, Award } from 'lucide-react';
-import AvatarVideo from '../assets/Demo2.mp4';
+import AvatarVideo from '../../assets/Demo2.mp4';
 
 function InterviewComponent() {
   const [pdfUploaded, setPdfUploaded] = useState(false);
