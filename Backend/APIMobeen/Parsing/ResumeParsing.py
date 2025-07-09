@@ -26,6 +26,7 @@ async def extract_text_from_pdf(file):
 
 
 def GenQuestions(API_KEY, OCRText, QuestionType):
+
     client = Groq(api_key = API_KEY)
     client = instructor.from_groq(client, mode = instructor.Mode.TOOLS)
     
@@ -39,7 +40,7 @@ def GenQuestions(API_KEY, OCRText, QuestionType):
     """
     
     resp = client.chat.completions.create(
-    model="mixtral-8x7b-32768",
+    model="llama-3.3-70b-versatile",
     messages=[
         {
             "role": "user",

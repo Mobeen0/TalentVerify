@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../../context/ThemeContext';
+import ThemeToggle from '../../../components/ThemeToggle';
 
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
@@ -25,6 +27,7 @@ import userimg from "../../../assets/images/users/3.jpg";
 
 const Header = (props) => {
   let navigate = useNavigate();
+  const { isDarkMode } = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -61,29 +64,56 @@ const Header = (props) => {
   return (
     <AppBar
       sx={{
-        backgroundColor: "#2c3e50", // A rich dark blue/slate color
-        boxShadow: "0 4px 12px 0 rgba(0,0,0,0.1)",
+        backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        position: "fixed",
+        width: "100%",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
         ...props.sx
       }}
       elevation={0}
       className={props.customClass}
     >
-      <Toolbar sx={{ justifyContent: "space-between", minHeight: "64px" }}>
+      <Toolbar 
+        sx={{ 
+          justifyContent: "space-between", 
+          minHeight: "64px",
+          px: { xs: 2, sm: 3 },
+          maxWidth: "100%"
+        }}
+      >
         {/* Left side - Menu icon */}
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={props.toggleMobileSidebar}
-          sx={{
-            display: {
-              lg: "none",
-              xs: "inline",
-            },
-            color: "#ecf0f1", // Light color for better contrast
-          }}
-        >
-          <MenuOutlinedIcon width="20" height="20" />
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <IconButton
+            color="inherit"
+            aria-label="menu"
+            onClick={props.toggleMobileSidebar}
+            sx={{
+              display: {
+                lg: "none",
+                xs: "inline",
+              },
+              color: isDarkMode ? "#ffffff" : "#2c3e50",
+              mr: 1
+            }}
+          >
+            <MenuOutlinedIcon width="20" height="20" />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="menu"
+            onClick={props.toggleSidebar}
+            sx={{
+              display: {
+                lg: "inline",
+                xs: "none",
+              },
+              color: isDarkMode ? "#ffffff" : "#2c3e50",
+            }}
+          >
+            <MenuOutlinedIcon width="20" height="20" />
+          </IconButton>
+        </Box>
 
         {/* Right side - User profile */}
         <Box 
@@ -94,14 +124,7 @@ const Header = (props) => {
             marginLeft: "auto" 
           }}
         >
-          <Divider 
-            orientation="vertical" 
-            flexItem 
-            sx={{ 
-              height: 28, 
-              backgroundColor: "rgba(255,255,255,0.2)" 
-            }} 
-          />
+          <ThemeToggle />
           
           <Button
             aria-label="menu"
@@ -114,7 +137,7 @@ const Header = (props) => {
               padding: "4px",
               transition: "all 0.2s ease-in-out",
               "&:hover": {
-                backgroundColor: "rgba(255,255,255,0.1)"
+                backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.04)"
               }
             }}
           >
@@ -122,6 +145,7 @@ const Header = (props) => {
               sx={{
                 display: "flex",
                 alignItems: "center",
+                gap: 1
               }}
             >
               <Avatar
@@ -130,7 +154,7 @@ const Header = (props) => {
                 sx={{
                   width: "36px",
                   height: "36px",
-                  border: "2px solid #3498db", // Accent color for border
+                  border: "2px solid #1E90FF",
                 }}
               />
             </Box>
@@ -148,36 +172,38 @@ const Header = (props) => {
               "& .MuiMenu-paper": {
                 width: "250px",
                 borderRadius: "8px",
-                boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 right: 0,
                 top: "70px !important",
+                backgroundColor: isDarkMode ? "#1a1a1a" : "#ffffff",
               },
             }}
           >
-            <MenuItem onClick={handleClose4} sx={{ padding: "10px 16px" }}>
+            <MenuItem onClick={handleClose4} sx={{ padding: "12px 16px" }}>
               <Avatar
                 src={userimg}
                 sx={{
                   width: "40px",
                   height: "40px",
-                  border: "2px solid #3498db", // Match the accent color
+                  border: "2px solid #1E90FF",
                 }}
               />
               <Box
                 sx={{
                   ml: 2,
                   fontWeight: "500",
+                  color: isDarkMode ? "#ffffff" : "#2c3e50"
                 }}
               >
                 My account
               </Box>
             </MenuItem>
-            <Divider sx={{ margin: "4px 0" }} />
-            <MenuItem onClick={handleClose4} sx={{ padding: "10px 16px" }}>
+            <Divider sx={{ margin: "4px 0", backgroundColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)" }} />
+            <MenuItem onClick={handleClose4} sx={{ padding: "12px 16px" }}>
               <ListItemIcon>
                 <LogoutOutlinedIcon fontSize="small" sx={{ color: "#e74c3c" }} />
               </ListItemIcon>
-              Logout
+              <Box sx={{ color: isDarkMode ? "#ffffff" : "#2c3e50" }}>Logout</Box>
             </MenuItem>
           </Menu>
         </Box>

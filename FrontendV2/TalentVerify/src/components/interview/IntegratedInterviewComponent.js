@@ -8,23 +8,24 @@ import {
   Mic, MicOff, Send, FileUp, Clock, Award, Brain, 
   SmilePlus, PlayCircle, StopCircle
 } from 'lucide-react';
-import AvatarVideo from '../assets/Demo2.mp4';
+import AvatarVideo from '../../assets/Demo2.mp4';
 
 // Import sub-components
-import UploadScreen from './UploadScreen';
 import InterviewHeader from './InterviewHeader';
-import AvatarVideoPlayer from './AvatarVideoPlayer';
 import InterviewChat from './InterviewChat';
-import UserInputArea from './UserInputArea';
-import WebcamDisplay from './WebcamDisplay';
-import EmotionIndicators from './EmotionIndicators';
-import EmotionChat from './EmotionChat';
-import EmotionControls from './EmotionControls';
-import CSSAnimations from './CSSAnimations';
+import UserInputArea from '../common/UserInputArea';
+import WebcamDisplay from '../common/WebcamDisplay';
+import AvatarVideoPlayer from './components/AvatarVideoPlayer';
+import UploadScreen from './components/UploadScreen';
+import EmotionIndicators from '../emotion/indicators/EmotionIndicators';
+import EmotionChat from '../emotion/chat/EmotionChat';
+import EmotionControls from '../emotion/controls/EmotionControls';
+import CSSAnimations from '../common/CSSAnimations';
+import InterviewCompletionScreen from './InterviewCompletionScreen';
 
 function IntegratedInterviewComponent() {
   // Define total questions to ask constant
-  const TOTAL_QUESTIONS_TO_ASK = 5;
+  const TOTAL_QUESTIONS_TO_ASK = 3;
   
   let navigate = useNavigate()
 
@@ -305,6 +306,7 @@ function IntegratedInterviewComponent() {
         });
         const { score, remarks } = response.data;
         setEvaluationResult({ score, remarks });
+        setEvaluationResults(prev => [...prev, { score, remarks }]);
         setUserInput('');
   
         // Add emotion feedback to emotion chat
@@ -317,11 +319,10 @@ function IntegratedInterviewComponent() {
             ...prevHistory,
             { type: 'system', text: 'Thank you for completing the interview questions!' },
           ]);
-
           
           // Stop emotion detection when interview ends
           stopEmotionDetection();
-          navigate("/dashboards/intervieweeSearch")
+          setIsInterviewComplete(true);
         }
       } catch (error) {
         console.error('Error evaluating answer:', error);
@@ -605,6 +606,13 @@ function IntegratedInterviewComponent() {
   const progress = questions.length > 0 
     ? Math.round(((currentQuestionIndex + 1) / questions.length) * 100) 
     : 0;
+
+  const [isInterviewComplete, setIsInterviewComplete] = useState(false);
+  const [evaluationResults, setEvaluationResults] = useState([]);
+
+  if (isInterviewComplete) {
+    return <InterviewCompletionScreen evaluationResults={evaluationResults} />;
+  }
 
   return (
     <div className="tw-flex tw-h-screen tw-bg-gradient-to-br tw-from-blue-50 tw-to-indigo-50 tw-p-6 tw-transition-all tw-duration-500">

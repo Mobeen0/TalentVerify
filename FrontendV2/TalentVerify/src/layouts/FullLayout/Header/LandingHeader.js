@@ -59,19 +59,27 @@ const LandingHeader = () => {
 
   return (
     <AppBar 
-      position="static" 
+      position="fixed" 
       elevation={0} 
       sx={{ 
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
         borderBottom: '1px solid #e0e0e0',
+        width: '100%',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
-      <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ py: 1 }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
+        <Toolbar 
+          disableGutters 
+          sx={{ 
+            py: 1,
+            minHeight: '64px',
+            justifyContent: 'space-between'
+          }}
+        >
           {/* Logo */}
           <Box 
             sx={{ 
-              flexGrow: { xs: 1, md: 0 }, 
               display: 'flex', 
               alignItems: 'center',
             }}
@@ -81,116 +89,138 @@ const LandingHeader = () => {
 
           {/* Desktop Navigation */}
           {!isMobile && (
-            <>
-              <Box sx={{ flexGrow: 1 }} />
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: 1
+            }}>
+              {navItems.map((item) => (
+                <Button
+                  key={item.label}
+                  component={Link}
+                  to={item.path}
+                  sx={{
+                    color: '#2c3e50',
+                    px: 2,
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#1E90FF',
+                    }
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
+              <Button
+                variant="contained"
+                component={Link}
+                to="/contact"
+                sx={{
+                  ml: 1,
+                  backgroundColor: '#1E90FF',
+                  color: 'white',
+                  borderRadius: '50px',
+                  px: 3,
+                  py: 0.8,
+                  textTransform: 'none',
+                  fontSize: '0.95rem',
+                  fontWeight: 500,
+                  boxShadow: 'none',
+                  '&:hover': {
+                    backgroundColor: '#0d8aff',
+                    boxShadow: 'none'
+                  }
+                }}
+              >
+                Contact
+              </Button>
+            </Box>
+          )}
+
+          {/* Mobile Navigation */}
+          {isMobile && (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                size="large"
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                sx={{ 
+                  color: '#2c3e50',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.04)'
+                  }
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                  '& .MuiMenu-paper': {
+                    width: '200px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    mt: 1
+                  }
+                }}
+              >
                 {navItems.map((item) => (
-                  <Button
-                    key={item.label}
+                  <MenuItem 
+                    key={item.label} 
+                    onClick={handleCloseNavMenu}
                     component={Link}
                     to={item.path}
                     sx={{
-                      color: '#333',
-                      mx: 2,
-                      fontWeight: 500,
-                      textTransform: 'none',
-                      fontSize: '1rem',
+                      py: 1.5,
+                      color: '#2c3e50',
                       '&:hover': {
-                        backgroundColor: 'transparent',
-                        color: '#1E90FF',
+                        backgroundColor: 'rgba(30,144,255,0.08)',
+                        color: '#1E90FF'
                       }
                     }}
                   >
                     {item.label}
-                  </Button>
+                  </MenuItem>
                 ))}
-                <Button
-                  variant="contained"
+                <MenuItem 
+                  onClick={handleCloseNavMenu}
                   component={Link}
                   to="/contact"
                   sx={{
-                    ml: 2,
-                    backgroundColor: '#1E90FF',
-                    color: 'white',
-                    borderRadius: '50px',
-                    px: 3,
-                    py: 0.8,
-                    textTransform: 'none',
-                    fontSize: '1rem',
+                    py: 1.5,
+                    color: '#1E90FF',
                     fontWeight: 500,
-                    boxShadow: 'none',
                     '&:hover': {
-                      backgroundColor: '#0d8aff',
-                      boxShadow: 'none'
+                      backgroundColor: 'rgba(30,144,255,0.08)'
                     }
                   }}
                 >
                   Contact
-                </Button>
-              </Box>
-            </>
+                </MenuItem>
+              </Menu>
+            </Box>
           )}
-
-            {/* Mobile Navigation */}
-            {isMobile && (
-              <>
-                <Box sx={{ flexGrow: 1 }} />
-                <IconButton
-                  size="large"
-                  aria-label="menu"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="inherit"
-                  sx={{ color: '#333' }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                  }}
-                >
-                  {navItems.map((item) => (
-                    <MenuItem 
-                      key={item.label} 
-                      onClick={handleCloseNavMenu}
-                      component={Link}
-                      to={item.path}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                  <MenuItem 
-                    onClick={handleCloseNavMenu}
-                    component={Link}
-                    to="/contact"
-                    sx={{
-                      color: '#1E90FF',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    Contact
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-          </Toolbar>
-        </Container>
-      </AppBar>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

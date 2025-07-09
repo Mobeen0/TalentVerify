@@ -1,14 +1,15 @@
 import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
+import { useTheme } from '../../../../src/context/ThemeContext';
 import Chart from 'react-apexcharts';
 
-
-
 const SalesOverview = () => {
+  const { isDarkMode } = useTheme();
+
   const optionssalesoverview = {
     grid: {
       show: true,
-      borderColor: "transparent",
+      borderColor: isDarkMode ? "rgba(255, 255, 255, 0.1)" : "transparent",
       strokeDashArray: 2,
       padding: {
         left: 0,
@@ -24,7 +25,6 @@ const SalesOverview = () => {
         borderRadius: 5,
       },
     },
-
     colors: ["#1e4db7", "#a7e3f4"],
     fill: {
       type: "solid",
@@ -35,11 +35,12 @@ const SalesOverview = () => {
       toolbar: {
         show: false,
       },
-      foreColor: "#adb0bb",
+      foreColor: isDarkMode ? "#ffffff" : "#adb0bb",
       fontFamily: "'DM Sans',sans-serif",
       sparkline: {
         enabled: false,
       },
+      background: isDarkMode ? '#1a1a1a' : '#ffffff',
     },
     dataLabels: {
       enabled: false,
@@ -53,23 +54,21 @@ const SalesOverview = () => {
     xaxis: {
       type: "category",
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "July",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec",
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "July", "Aug", "Sept", "Oct", "Nov", "Dec",
       ],
       labels: {
         style: {
-          cssClass: "grey--text lighten-2--text fill-color",
+          colors: isDarkMode ? '#ffffff' : '#adb0bb',
         },
+      },
+      axisBorder: {
+        show: true,
+        color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
+      },
+      axisTicks: {
+        show: true,
+        color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
       },
     },
     yaxis: {
@@ -79,8 +78,12 @@ const SalesOverview = () => {
       tickAmount: 3,
       labels: {
         style: {
-          cssClass: "grey--text lighten-2--text fill-color",
+          colors: isDarkMode ? '#ffffff' : '#adb0bb',
         },
+      },
+      axisBorder: {
+        show: true,
+        color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
       },
     },
     stroke: {
@@ -90,9 +93,10 @@ const SalesOverview = () => {
       colors: ["transparent"],
     },
     tooltip: {
-      theme: "dark",
+      theme: isDarkMode ? "dark" : "light",
     },
   };
+
   const seriessalesoverview = [
     {
       name: "Ample Admin",
@@ -104,15 +108,13 @@ const SalesOverview = () => {
     },
   ];
 
-
-
-
-
   return (
     <Card
       variant="outlined"
       sx={{
         paddingBottom: "0",
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
       }}
     >
       <CardContent
@@ -134,6 +136,7 @@ const SalesOverview = () => {
               variant="h3"
               sx={{
                 marginBottom: "0",
+                color: isDarkMode ? '#ffffff' : '#2c3e50',
               }}
               gutterBottom
             >
@@ -168,7 +171,7 @@ const SalesOverview = () => {
               <Typography
                 variant="h6"
                 sx={{
-                  color: "secondary.main",
+                  color: isDarkMode ? '#ffffff' : 'secondary.main',
                 }}
               >
                 Ample
@@ -193,7 +196,7 @@ const SalesOverview = () => {
               <Typography
                 variant="h6"
                 sx={{
-                  color: "primary.main",
+                  color: isDarkMode ? '#ffffff' : 'primary.main',
                 }}
               >
                 Pixel Admin
@@ -201,16 +204,12 @@ const SalesOverview = () => {
             </Box>
           </Box>
         </Box>
-        <Box
-          sx={{
-            marginTop: "25px",
-          }}
-        >
+        <Box sx={{ height: 355 }}>
           <Chart
             options={optionssalesoverview}
             series={seriessalesoverview}
             type="bar"
-            height="295px"
+            height="100%"
           />
         </Box>
       </CardContent>

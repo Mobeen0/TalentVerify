@@ -25,7 +25,7 @@ import Parsing.AnswerEvaluation
 
 
 
-load_dotenv()
+load_dotenv(override=True)
 CONNECTION_URI = os.getenv('CONNECTION_URI')
 GROQ_API = os.getenv("GROQ_API_KEY")
 
@@ -158,6 +158,7 @@ async def GetQuestions(file:UploadFile):
     OCRText = await Parsing.ResumeParsing.extract_text_from_pdf(file)
     
     try:
+        raise("skipping")
         HardQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Hard")
         SoftQuestions = Parsing.ResumeParsing.GenQuestions(GROQ_API,OCRText,"Soft")
         return JSONResponse(content={"Hard":HardQuestions,"Soft":SoftQuestions}, status_code=200)

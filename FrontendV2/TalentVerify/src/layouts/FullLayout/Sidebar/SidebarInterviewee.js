@@ -11,48 +11,104 @@ import {
   ListItemText,
   IconButton,
   Tooltip,
-  Typography
+  Typography,
+  Collapse,
+  Divider,
+  styled
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
 import LogoIcon from "../Logo/LogoIcon";
 import Menuitems from "./dataInterviewee";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+
+// Styled components
+const StyledListItem = styled(ListItem)(({ theme, selected, collapsed }) => ({
+  borderRadius: '8px',
+  marginBottom: '4px',
+  transition: 'all 0.2s ease',
+  padding: collapsed ? '8px 12px' : '8px 16px',
+  '&:hover': {
+    backgroundColor: 'rgba(25, 118, 210, 0.08)',
+    '& .MuiListItemIcon-root': {
+      color: theme.palette.primary.main,
+    }
+  },
+  ...(selected && {
+    backgroundColor: `${theme.palette.primary.main}!important`,
+    color: '#ffffff',
+    '& .MuiListItemIcon-root': {
+      color: '#ffffff',
+    }
+  }),
+}));
+
+const StyledSubListItem = styled(ListItem)(({ theme, selected }) => ({
+  borderRadius: '6px',
+  marginLeft: '16px',
+  marginBottom: '2px',
+  padding: '6px 16px',
+  transition: 'all 0.2s ease',
+  '&:hover': {
+    backgroundColor: 'rgba(25, 118, 210, 0.08)',
+  },
+  ...(selected && {
+    backgroundColor: 'rgba(25, 118, 210, 0.12)',
+    color: theme.palette.primary.main,
+  }),
+}));
+
+const CategoryHeader = styled(Typography)(({ theme, collapsed }) => ({
+  fontSize: '0.75rem',
+  fontWeight: 600,
+  textTransform: 'uppercase',
+  color: theme.palette.text.secondary,
+  padding: '16px 16px 8px 16px',
+  opacity: collapsed ? 0 : 1,
+  display: collapsed ? 'none' : 'block',
+}));
 
 const Sidebar = (props) => {
   const [open, setOpen] = useState(true);
   const [minimized, setMinimized] = useState(false);
+  const [expandedItems, setExpandedItems] = useState({});
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   const handleClick = (index) => {
-    if (open === index) {
-      setOpen((prevopen) => !prevopen);
-    } else {
-      setOpen(index);
-    }
+    setExpandedItems(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
   };
 
   const toggleMinimize = () => {
     setMinimized(!minimized);
   };
 
-  const minimizedWidth = 80; // Width when sidebar is minimized
+  // Group menu items by category
+  const menuByCategory = Menuitems.reduce((acc, item) => {
+    const category = item.category || 'Other';
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(item);
+    return acc;
+  }, {});
 
   const SidebarContent = (
-    <Box 
-      sx={{ 
-        height: "100vh", 
-        display: 'flex', 
-        flexDirection: 'column',
-        background: 'white',
-        color: '#1976d2',
-        overflow: 'hidden',
-        borderRadius: '0 16px 16px 0',
-        boxShadow: '0 0 20px rgba(0,0,0,0.05)'
-      }}
-    >
+    <Box sx={{ 
+      height: "100vh", 
+      display: 'flex', 
+      flexDirection: 'column',
+      background: 'white',
+      color: '#1976d2',
+      overflow: 'hidden',
+      borderRadius: '0 16px 16px 0',
+      boxShadow: '0 0 20px rgba(0,0,0,0.05)'
+    }}>
       <Box sx={{ 
         display: "flex", 
         alignItems: "center", 
@@ -74,6 +130,7 @@ const Sidebar = (props) => {
                   color: '#1976d2'
                 }}
               >
+                TalentVerify
               </Typography>
             </Box>
           </Link>
@@ -92,80 +149,109 @@ const Sidebar = (props) => {
           }}
           size="small"
         >
-          {minimized ? <MenuIcon /> : <ChevronLeftIcon />}
+          {minimized ? <ChevronLeftIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </Box>
 
-      <Box sx={{ flexGrow: 1, overflow: 'auto', mt: 2 }}>
-        <List sx={{ px: 2 }}>
-          {Menuitems.map((item, index) => {
-            const isActive = pathDirect === item.href;
-            
-            return (
-              <Tooltip 
-                title={minimized ? item.title : ""} 
-                placement="right" 
-                key={item.title}
-                arrow
-              >
-                <ListItem
-                  onClick={() => handleClick(index)}
-                  button
-                  component={NavLink}
-                  to={item.href}
-                  selected={isActive}
-                  sx={{
-                    mb: 1.5,
-                    borderRadius: '8px',
-                    px: 2,
-                    justifyContent: minimized ? 'center' : 'flex-start',
-                    py: 1.5,
-                    transition: 'all 0.2s ease',
-                    ...(isActive ? {
-                      color: "white",
-                      backgroundColor: "#1976d2 !important",
-                      fontWeight: 500
-                    } : {
-                      color: "#1976d2",
-                      '&:hover': {
-                        backgroundColor: 'rgba(25, 118, 210, 0.08)'
-                      }
-                    }),
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: minimized ? 0 : 36,
-                      mr: minimized ? 0 : 3,
-                      justifyContent: minimized ? 'center' : 'flex-start',
-                      color: isActive ? "white" : "#1976d2"
-                    }}
-                  >
-                    <item.icon width="24" height="24" />
-                  </ListItemIcon>
-                  
-                  {!minimized && (
-                    <ListItemText 
-                      primary={
-                        <Typography 
-                          variant="body1" 
-                          sx={{ 
-                            fontWeight: isActive ? 600 : 500,
-                            fontSize: '1rem'
+      <Box sx={{ flexGrow: 1, overflow: 'auto', py: 2 }}>
+        {Object.entries(menuByCategory).map(([category, items]) => (
+          <Box key={category}>
+            <CategoryHeader variant="overline" collapsed={minimized}>
+              {category}
+            </CategoryHeader>
+            <List sx={{ px: 2 }}>
+              {items.map((item, index) => {
+                const isActive = pathDirect === item.href;
+                const hasSubItems = item.subItems && item.subItems.length > 0;
+                const isExpanded = expandedItems[index];
+
+                return (
+                  <React.Fragment key={item.title}>
+                    <Tooltip 
+                      title={minimized ? item.title : ""} 
+                      placement="right" 
+                      arrow
+                    >
+                      <StyledListItem
+                        onClick={() => hasSubItems ? handleClick(index) : null}
+                        button={!hasSubItems}
+                        component={hasSubItems ? 'div' : NavLink}
+                        to={hasSubItems ? undefined : item.href}
+                        selected={isActive}
+                        collapsed={minimized}
+                      >
+                        <ListItemIcon
+                          sx={{
+                            minWidth: minimized ? 0 : 36,
+                            mr: minimized ? 0 : 2,
+                            justifyContent: minimized ? 'center' : 'flex-start',
+                            color: isActive ? "white" : "#1976d2"
                           }}
                         >
-                          {item.title}
-                        </Typography>
-                      } 
-                    />
-                  )}
-                </ListItem>
-              </Tooltip>
-            );
-          })}
-        </List>
+                          <item.icon width="22" height="22" />
+                        </ListItemIcon>
+                        {!minimized && (
+                          <>
+                            <ListItemText 
+                              primary={
+                                <Typography 
+                                  variant="body2" 
+                                  sx={{ 
+                                    fontWeight: isActive ? 600 : 500,
+                                  }}
+                                >
+                                  {item.title}
+                                </Typography>
+                              } 
+                            />
+                            {hasSubItems && (
+                              isExpanded ? <ExpandLess /> : <ExpandMore />
+                            )}
+                          </>
+                        )}
+                      </StyledListItem>
+                    </Tooltip>
+
+                    {hasSubItems && !minimized && (
+                      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                          {item.subItems.map((subItem) => (
+                            <StyledSubListItem
+                              key={subItem.title}
+                              button
+                              component={NavLink}
+                              to={subItem.href}
+                              selected={pathDirect === subItem.href}
+                            >
+                              <ListItemText 
+                                primary={
+                                  <Typography 
+                                    variant="body2" 
+                                    sx={{ 
+                                      fontSize: '0.875rem',
+                                      fontWeight: pathDirect === subItem.href ? 500 : 400,
+                                    }}
+                                  >
+                                    {subItem.title}
+                                  </Typography>
+                                } 
+                              />
+                            </StyledSubListItem>
+                          ))}
+                        </List>
+                      </Collapse>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </List>
+            {category !== Object.keys(menuByCategory).pop() && (
+              <Divider sx={{ my: 2, mx: 2, opacity: 0.1 }} />
+            )}
+          </Box>
+        ))}
       </Box>
-      
+
       {!minimized && (
         <Box 
           sx={{ 
@@ -184,7 +270,7 @@ const Sidebar = (props) => {
               fontSize: '0.75rem'
             }}
           >
-            © 2025 TalentVerify
+            © 2024 TalentVerify
           </Typography>
         </Box>
       )}
@@ -199,7 +285,7 @@ const Sidebar = (props) => {
         variant="persistent"
         PaperProps={{
           sx: {
-            width: minimized ? minimizedWidth : SidebarWidth,
+            width: minimized ? 80 : SidebarWidth,
             transition: "width 0.3s ease",
             border: 'none',
             overflow: 'visible'
@@ -217,8 +303,7 @@ const Sidebar = (props) => {
       onClose={props.onSidebarClose}
       PaperProps={{
         sx: {
-          width: minimized ? minimizedWidth : SidebarWidth,
-          transition: "width 0.3s ease",
+          width: SidebarWidth,
           border: 'none',
           overflow: 'visible'
         },

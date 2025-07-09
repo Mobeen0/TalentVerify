@@ -8,7 +8,7 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-
+import { useTheme } from '../../../../src/context/ThemeContext';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 
 import Timeline from "@mui/lab/Timeline";
@@ -50,6 +50,7 @@ const activities = [
 ];
 
 const DailyActivities = () => {
+  const { isDarkMode } = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -63,6 +64,8 @@ const DailyActivities = () => {
       variant="outlined"
       sx={{
         pb: 0,
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
       }}
     >
       <CardContent
@@ -83,17 +86,18 @@ const DailyActivities = () => {
                 fontWeight: "500",
                 fontSize: "h3.fontSize",
                 marginBottom: "0",
+                color: isDarkMode ? '#ffffff' : '#2c3e50',
               }}
               gutterBottom
             >
               Daily Activities
             </Typography>
             <Typography
-              color="textSecondary"
               variant="body1"
               sx={{
                 fontWeight: "400",
                 fontSize: "13px",
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
               }}
             >
               Overview of Years
@@ -108,6 +112,9 @@ const DailyActivities = () => {
               aria-expanded={open ? "true" : undefined}
               aria-haspopup="true"
               onClick={handleClick}
+              sx={{
+                color: isDarkMode ? '#ffffff' : 'inherit',
+              }}
             >
               <MoreVertOutlinedIcon />
             </IconButton>
@@ -127,12 +134,23 @@ const DailyActivities = () => {
                 vertical: "top",
                 horizontal: "right",
               }}
+              PaperProps={{
+                sx: {
+                  backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+                  color: isDarkMode ? '#ffffff' : 'inherit',
+                },
+              }}
             >
               {options.map((option) => (
                 <MenuItem
                   key={option}
                   selected={option === "Pyxis"}
                   onClick={handleClose}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
                 >
                   {option}
                 </MenuItem>
@@ -152,6 +170,7 @@ const DailyActivities = () => {
                   fontSize: "12px",
                   fontWeight: "700",
                   flex: "0",
+                  color: isDarkMode ? '#ffffff' : 'inherit',
                 }}
               >
                 {activity.time}
@@ -163,12 +182,12 @@ const DailyActivities = () => {
                     borderColor: activity.color,
                   }}
                 />
-                <TimelineConnector />
+                <TimelineConnector sx={{ backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.12)' }} />
               </TimelineSeparator>
               <TimelineContent
-                color="text.secondary"
                 sx={{
                   fontSize: "14px",
+                  color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
                 }}
               >
                 {activity.text}

@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
 import { Link, NavLink } from "react-router-dom";
+import { useTheme } from '../../../context/ThemeContext';
 import {
   Box,
   Drawer,
@@ -19,6 +20,7 @@ const Sidebar = (props) => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const { isDarkMode } = useTheme();
 
   const handleClick = (index) => {
     if (open === index) {
@@ -29,7 +31,14 @@ const Sidebar = (props) => {
   };
 
   const SidebarContent = (
-    <Box sx={{ p: 3, height: "calc(100vh - 40px)" }}>
+    <Box 
+      sx={{ 
+        p: 3, 
+        height: "calc(100vh - 40px)",
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        color: isDarkMode ? '#ffffff' : '#2c3e50',
+      }}
+    >
       <Link to="/">
         <Box sx={{ display: "flex", alignItems: "Center" }}>
           <LogoIcon />
@@ -43,8 +52,6 @@ const Sidebar = (props) => {
           }}
         >
           {Menuitems.map((item, index) => {
-            //{/********SubHeader**********/}
-
             return (
               <List component="li" disablePadding key={item.title}>
                 <ListItem
@@ -55,6 +62,10 @@ const Sidebar = (props) => {
                   selected={pathDirect === item.href}
                   sx={{
                     mb: 1,
+                    color: isDarkMode ? '#ffffff' : '#2c3e50',
+                    '&:hover': {
+                      backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.04)',
+                    },
                     ...(pathDirect === item.href && {
                       color: "white",
                       backgroundColor: (theme) =>
@@ -64,6 +75,7 @@ const Sidebar = (props) => {
                 >
                   <ListItemIcon
                     sx={{
+                      color: isDarkMode ? '#ffffff' : '#2c3e50',
                       ...(pathDirect === item.href && { color: "white" }),
                     }}
                   >
@@ -78,6 +90,7 @@ const Sidebar = (props) => {
       </Box>
     </Box>
   );
+
   if (lgUp) {
     return (
       <Drawer
@@ -87,6 +100,8 @@ const Sidebar = (props) => {
         PaperProps={{
           sx: {
             width: SidebarWidth,
+            backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+            borderRight: isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.12)',
           },
         }}
       >
@@ -94,6 +109,7 @@ const Sidebar = (props) => {
       </Drawer>
     );
   }
+
   return (
     <Drawer
       anchor="left"
@@ -102,6 +118,8 @@ const Sidebar = (props) => {
       PaperProps={{
         sx: {
           width: SidebarWidth,
+          backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+          borderRight: isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.12)',
         },
       }}
       variant="temporary"

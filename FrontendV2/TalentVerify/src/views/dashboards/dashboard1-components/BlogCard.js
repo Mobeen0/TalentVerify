@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
+import { useTheme } from '../../../../src/context/ThemeContext';
 
 import user1 from "../../../assets/images/backgrounds/u2.jpg";
 import user2 from "../../../assets/images/backgrounds/u3.jpg";
@@ -30,6 +31,8 @@ const blogs = [
 ];
 
 const BlogCard = () => {
+  const { isDarkMode } = useTheme();
+
   return (
     <Grid container>
       {blogs.map((blog, index) => (
@@ -48,6 +51,8 @@ const BlogCard = () => {
             sx={{
               p: 0,
               width: "100%",
+              backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+              borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#e0e0e0',
             }}
           >
             <img src={blog.img} alt="img" width="100%" />
@@ -61,16 +66,17 @@ const BlogCard = () => {
                 sx={{
                   fontSize: "h4.fontSize",
                   fontWeight: "500",
+                  color: isDarkMode ? '#ffffff' : '#2c3e50',
                 }}
               >
                 {blog.title}
               </Typography>
               <Typography
-                color="textSecondary"
                 sx={{
                   fontSize: "14px",
                   fontWeight: "400",
                   mt: 1,
+                  color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
                 }}
               >
                 {blog.subtitle}

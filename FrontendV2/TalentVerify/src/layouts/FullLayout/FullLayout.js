@@ -13,6 +13,7 @@ import SidebarEmployer from './Sidebar/SidebarEmployer'
 import SidebarInterviewee from './Sidebar/SidebarInterviewee'
 import Footer from "./Footer/Footer";
 import { TopbarHeight } from "../../assets/global/Theme-variable";
+import { useTheme } from '../../context/ThemeContext';
 
 import SignUp from '../../components/SignUp'
 
@@ -44,9 +45,17 @@ const FullLayout = (props) => {
   const location = useLocation();
   const [userType,setUserType] = useState("")
   const [userJson,setUserJson] = useState({})
+  const { isDarkMode } = useTheme();
 
-  
   const isHomePage = location.pathname === '/';
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleMobileSidebar = () => {
+    setMobileSidebarOpen(!isMobileSidebarOpen);
+  };
 
   return (
     <MainWrapper>
@@ -64,8 +73,8 @@ const FullLayout = (props) => {
               backgroundColor: "#ffffff",
               transition: "padding-left 0.3s ease",
             }}
-            toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-            toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+            toggleSidebar={toggleSidebar}
+            toggleMobileSidebar={toggleMobileSidebar}
           />
           {userType === "Employer" && <SidebarEmployer
             isSidebarOpen={isSidebarOpen}
@@ -87,8 +96,13 @@ const FullLayout = (props) => {
               sx={{
                 paddingTop: "20px",
                 paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "24px!important",
+                paddingRight: "24px!important",
                 width: "100%",
-                transition: "padding-left 0.3s ease",
+                maxWidth: "100% !important",
+                transition: "all 0.3s ease",
+                flex: 1,
+                marginLeft: 0,
+                marginRight: 0,
               }}
             >
               <Box sx={{ minHeight: "calc(100vh - 170px)" }}>

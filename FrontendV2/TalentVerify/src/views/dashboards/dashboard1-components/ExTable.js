@@ -9,6 +9,7 @@ import {
   TableRow,
   Chip,
 } from "@mui/material";
+import { useTheme } from '../../../../src/context/ThemeContext';
 
 const products = [
   {
@@ -50,38 +51,68 @@ const products = [
 ];
 
 const ExTable = () => {
+  const { isDarkMode } = useTheme();
+
   return (
     <Table
       aria-label="simple table"
       sx={{
         mt: 3,
         whiteSpace: "nowrap",
+        '& .MuiTableCell-root': {
+          borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(224, 224, 224, 1)',
+        },
       }}
     >
       <TableHead>
         <TableRow>
           <TableCell>
-            <Typography color="textSecondary" variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+              }}
+            >
               Id
             </Typography>
           </TableCell>
           <TableCell>
-            <Typography color="textSecondary" variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+              }}
+            >
               Assigned
             </Typography>
           </TableCell>
           <TableCell>
-            <Typography color="textSecondary" variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+              }}
+            >
               Name
             </Typography>
           </TableCell>
           <TableCell>
-            <Typography color="textSecondary" variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+              }}
+            >
               Priority
             </Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography color="textSecondary" variant="h6">
+            <Typography 
+              variant="h6"
+              sx={{
+                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+              }}
+            >
               Budget
             </Typography>
           </TableCell>
@@ -95,6 +126,7 @@ const ExTable = () => {
                 sx={{
                   fontSize: "15px",
                   fontWeight: "500",
+                  color: isDarkMode ? '#ffffff' : 'inherit',
                 }}
               >
                 {product.id}
@@ -112,14 +144,15 @@ const ExTable = () => {
                     variant="h6"
                     sx={{
                       fontWeight: "600",
+                      color: isDarkMode ? '#ffffff' : 'inherit',
                     }}
                   >
                     {product.name}
                   </Typography>
                   <Typography
-                    color="textSecondary"
                     sx={{
                       fontSize: "13px",
+                      color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
                     }}
                   >
                     {product.post}
@@ -128,7 +161,12 @@ const ExTable = () => {
               </Box>
             </TableCell>
             <TableCell>
-              <Typography color="textSecondary" variant="h6">
+              <Typography 
+                variant="h6"
+                sx={{
+                  color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
+                }}
+              >
                 {product.pname}
               </Typography>
             </TableCell>
@@ -145,7 +183,14 @@ const ExTable = () => {
               ></Chip>
             </TableCell>
             <TableCell align="right">
-              <Typography variant="h6">${product.budget}k</Typography>
+              <Typography 
+                variant="h6"
+                sx={{
+                  color: isDarkMode ? '#ffffff' : 'inherit',
+                }}
+              >
+                ${product.budget}k
+              </Typography>
             </TableCell>
           </TableRow>
         ))}

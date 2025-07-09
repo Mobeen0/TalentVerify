@@ -1,0 +1,139 @@
+:root {
+  /* Background Colors */
+  --background-primary: #ffffff;
+  --background-secondary: #f8f9fa;
+  --background-tertiary: #f1f3f5;
+
+  /* Text Colors */
+  --text-primary: #2c3e50;
+  --text-secondary: #6c757d;
+  --text-tertiary: #868e96;
+
+  /* Border Colors */
+  --border-primary: #dee2e6;
+  --border-secondary: #e9ecef;
+
+  /* Accent Colors */
+  --accent-primary: #1E90FF;
+  --accent-secondary: #4dabf7;
+  --accent-success: #40c057;
+  --accent-warning: #fcc419;
+  --accent-error: #fa5252;
+
+  /* Sidebar Colors */
+  --sidebar-background: #ffffff;
+  --sidebar-text: #2c3e50;
+  --sidebar-hover: #f8f9fa;
+  --sidebar-active: #e9ecef;
+
+  /* Card Colors */
+  --card-background: #ffffff;
+  --card-border: #dee2e6;
+
+  /* Input Colors */
+  --input-background: #ffffff;
+  --input-border: #dee2e6;
+  --input-text: #2c3e50;
+  --input-placeholder: #adb5bd;
+
+  /* Button Colors */
+  --button-primary-background: #1E90FF;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #4dabf7;
+  --button-secondary-background: #e9ecef;
+  --button-secondary-text: #495057;
+  --button-secondary-hover: #dee2e6;
+}
+
+/* Base styles */
+body {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles */
+.card {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Input styles */
+input, textarea, select {
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: var(--button-primary-background);
+  color: var(--button-primary-text);
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary-background);
+  color: var(--button-secondary-text);
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--button-secondary-hover);
+}
+
+/* Table styles */
+table {
+  background-color: var(--card-background);
+  border-color: var(--border-primary);
+}
+
+th {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+td {
+  border-color: var(--border-primary);
+  color: var(--text-primary);
+}
+
+/* Link styles */
+a {
+  color: var(--accent-primary);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-secondary);
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+} 
